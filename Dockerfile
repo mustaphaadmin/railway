@@ -5,8 +5,8 @@ RUN apt-get update && \
     apt-get clean
 
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN ls -l /entrypoint.sh && head -20 /entrypoint.sh
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "echo 'Entrypoint content:' && cat /entrypoint.sh && echo 'File info:' && file /entrypoint.sh && bash /entrypoint.sh"]
+CMD ["bash", "/entrypoint.sh"]
