@@ -1,4 +1,5 @@
 #!/bin/bash
+
 mkdir -p /app/output
 
 ffmpeg -re -i "http://iboeag.cdn-dtv.com/live/u5965466rtdy/byv3ayhv9q/3854.m3u8" \
