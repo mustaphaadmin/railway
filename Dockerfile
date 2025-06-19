@@ -9,4 +9,4 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 8080
 
-CMD ["/entrypoint.sh"]
+CMD ["sh", "-c", "echo 'Entrypoint content:' && cat /entrypoint.sh && echo 'File info:' && file /entrypoint.sh && bash /entrypoint.sh"]
