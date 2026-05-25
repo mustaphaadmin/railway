@@ -1,12 +1,9 @@
 name: Actualizar M3U8 de M24TV
 
 on:
-  # Ejecutar manualmente desde la pestaña Actions
   workflow_dispatch:
-  
-  # Ejecutar automáticamente cada 3 horas
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '0 */6 * * *'
 
 jobs:
   update-stream:
@@ -24,25 +21,26 @@ jobs:
       - name: Instalar yt-dlp
         run: pip install yt-dlp
       
-      - name: Obtener enlace m3u8 de M24TV
+      - name: Obtener enlace m3u8 usando cookies
         run: |
-          yt-dlp -g https://www.youtube.com/watch?v=qdXiGvwyUkA > m24tv.m3u8
-          echo "✅ Enlace actualizado el $(date)" >> m24tv.m3u8
+          # Usar las cookies que subiste
+          yt-dlp --cookies cookies.txt -g https://www.youtube.com/watch?v=qdXiGvwyUkA > m24tv.m3u8
+          echo "✅ Actualizado: $(date)" >> m24tv.m3u8
       
-      - name: Verificar que se obtuvo el enlace
+      - name: Verificar resultado
         run: |
           if [ -s m24tv.m3u8 ]; then
-            echo "✓ Archivo generado correctamente"
+            echo "✓ Enlace obtenido correctamente"
             head -n 1 m24tv.m3u8
           else
-            echo "❌ Error: No se pudo obtener el enlace"
+            echo "❌ Error: No se generó el enlace"
             exit 1
           fi
       
-      - name: Guardar cambios en GitHub
+      - name: Guardar cambios
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add m24tv.m3u8
-          git commit -m "Actualizar enlace M24TV - $(date +'%Y-%m-%d %H:%M:%S')" || echo "Sin cambios"
+          git commit -m "Actualizar M24TV - $(date +'%Y-%m-%d %H:%M:%S')" || echo "Sin cambios"
           git push
